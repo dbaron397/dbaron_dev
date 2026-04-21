@@ -1,0 +1,58 @@
+# Builds e caches locais
+*.o
+*.a
+*.so
+*.log
+
+# Arquivos gerados por simulação
+*.raw
+*.raw.bak
+*.dat
+*.out
+*.tr*
+*.lis
+*.ic
+*.node
+
+# Netlists gerados automaticamente
+simulation/*.spice
+simulation/*.cir
+simulation/*_ext.spice
+
+# Magic
+*.ext
+*.sim
+*.nodes
+*.res
+*.log
+magic_commands.log
+
+# Xschem auto-saves / backups
+*.sch.bak
+*.sym.bak
+*.sch.ast
+xschem.log
+xschem_tclcmd.tcl
+
+# KLayout
+*.lyrdb
+*.gds.lock
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*~
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OpenLane2 runs
+runs/
+
+# Não comitar caches das ferramentas
+tools/
+!docs/tools*.md

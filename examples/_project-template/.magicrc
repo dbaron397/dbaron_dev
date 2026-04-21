@@ -1,0 +1,18 @@
+# .magicrc — carrega o setup do PDK ativo e aplica alguns defaults.
+# Source com: magic  (magic detecta .magicrc automaticamente)
+
+# Carrega o magicrc do PDK ativo
+if { [info exists env(MAGIC_RC)] && [file exists $env(MAGIC_RC)] } {
+    source $env(MAGIC_RC)
+} else {
+    puts stderr "AVISO: MAGIC_RC não setado ou inexistente."
+    puts stderr "       Rode 'use-pdk <nome>' antes de abrir o magic."
+}
+
+# Paths adicionais do projeto
+addpath [file dirname [info script]]/layout
+addpath [file dirname [info script]]/layout/gds
+
+# Defaults úteis
+drc euclidean on
+snap internal

@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Stub executável -- avisa o usuário que use-pdk precisa ser uma função do
+# shell (carregada via env/ic-bashrc.sh). Se este script está sendo executado,
+# é porque o ic-bashrc.sh não foi source'ado ainda.
+
+cat <<'EOF' >&2
+ERRO: `use-pdk` precisa ser chamado como função do shell (ele exporta
+variáveis na sessão atual — não funcionaria se fosse só um executável).
+
+Para ativar:
+
+    echo 'source ~/ic/setup/env/ic-bashrc.sh' >> ~/.bashrc
+    source ~/.bashrc
+
+Depois:
+
+    use-pdk                # lista PDKs
+    use-pdk sky130A        # ativa
+
+Para apenas listar sem ativar, use:  ic-info
+EOF
+exit 1

@@ -1,0 +1,36 @@
+# Arquivo carregado automaticamente pelo Xschem quando aberto neste diretório.
+# Usa apenas variáveis de ambiente definidas por `use-pdk <nome>`, então o
+# mesmo arquivo funciona com qualquer PDK suportado.
+
+# --- Caminhos base --------------------------------------------------------
+if { [info exists env(PDK)] == 0 || [info exists env(PDK_ROOT)] == 0 } {
+    puts stderr "AVISO: PDK/PDK_ROOT não setados. Rode 'use-pdk <nome>' antes do xschem."
+    puts stderr "       Algumas bibliotecas podem não estar acessíveis."
+}
+
+# Biblioteca do PDK ativo
+if { [info exists env(XSCHEM_LIBRARY_PATH)] } {
+    append XSCHEM_LIBRARY_PATH ":$env(XSCHEM_LIBRARY_PATH)"
+}
+
+# Biblioteca do próprio projeto (o diretório onde este .xschemrc vive)
+set project_dir [file dirname [info script]]
+append XSCHEM_LIBRARY_PATH ":$project_dir"
+
+# Biblioteca user global (opcional)
+if { [info exists env(XSCHEM_USER_LIBRARY_PATH)] } {
+    append XSCHEM_LIBRARY_PATH ":$env(XSCHEM_USER_LIBRARY_PATH)"
+}
+
+# --- Preferências visuais -------------------------------------------------
+set dark_colorscheme   0
+set snap               0.2
+set grid               2
+set draw_grid          1
+set persistent_command 1
+set autotrim_wires     1
+
+# --- Diretório de netlist saída ------------------------------------------
+# Sai em ./simulation para ficar junto dos testbenches deste projeto.
+set netlist_dir "$project_dir/simulation"
+file mkdir $netlist_dir

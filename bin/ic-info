@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# ic-info: mostra estado atual do ambiente de IC (PDK ativo, caminhos,
+# versões das ferramentas encontradas). Executável -- não precisa source.
+
+set -u
+
+print_kv() { printf "  %-22s %s\n" "$1" "${2:-<não definido>}"; }
+print_h()  { printf "\n\033[1;36m%s\033[0m\n" "$*"; }
+
+print_h "Ambiente"
+print_kv "IC_HOME"   "${IC_HOME:-}"
+print_kv "IC_ROOT"   "${IC_ROOT:-}"
+print_kv "PDK_ROOT"  "${PDK_ROOT:-}"
+print_kv "PDK"       "${PDK:-<nenhum ativo — rode use-pdk <nome>>}"
+print_kv "PDKPATH"   "${PDKPATH:-}"
+
+print_h "PDKs instalados em \$PDK_ROOT"
+if [[ -d "${PDK_ROOT:-}" ]]; then
+    ls -1 "$PDK_ROOT" 2>/dev/null | sed 's/^/  /'
+else
+    echo "  (PDK_ROOT não existe)"
+fi
+
+print_h "Ferramentas (se presentes no PATH)"
+for t in xschem ngspice magic netgen klayout gaw \
+         yosys iverilog verilator gtkwave \
+         openroad openlane nix; do
+    if command -v "$t" >/dev/null 2>&1; then
+        ver=$("$t" --version 2>&1 | head -1 || echo "?")
+        printf "  \033[0;32m✓\033[0m %-10s %s\n" "$t" "$ver"
+    else
+        printf "  \033[0;31m✗\033[0m %-10s (não instalado)\n" "$t"
+    fi
+done
+
+print_h "Dicas"
+echo "  use-pdk              # lista PDKs disponíveis"
+echo "  use-pdk sky130A      # ativa SkyWater 130A na sessão atual"
+echo "  ic-info              # mostra este relatório"
+echo
