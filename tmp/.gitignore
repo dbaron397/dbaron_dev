@@ -1,0 +1,6 @@
+# tmp/ é a pasta de compartilhamento com o Claude -- precisamos forçar o
+# tracking de arquivos que normalmente seriam ignorados pelo .gitignore raiz
+# (logs, pngs, netlists etc.). Regra: nesta pasta, NADA é ignorado (negação
+# via '!').
+!*
+!*/*
