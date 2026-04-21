@@ -20,7 +20,7 @@ require_sudo
 # ------------------------------------------------------------------
 # Refs podem ser alteradas via env var, ex.: NGSPICE_VERSION=44 bash 01-install-analog.sh
 : "${XSCHEM_REF:=master}"            # Xschem: usa master (muito ativo, estável)
-: "${NGSPICE_VERSION:=44}"           # ngspice release
+: "${NGSPICE_VERSION:=43}"           # ngspice release (última estável)
 : "${MAGIC_REF:=master}"             # magic
 : "${NETGEN_REF:=master}"            # netgen
 : "${KLAYOUT_VERSION:=0.29.11}"      # klayout (se .deb, senão build from source)
@@ -46,15 +46,18 @@ install_xschem() {
 install_ngspice() {
     local ver="$NGSPICE_VERSION"
     local tarball="ngspice-${ver}.tar.gz"
-    local url="https://sourceforge.net/projects/ngspice/files/ng-spice-rework/${ver}/${tarball}/download"
-    local dir="$IC_SRC/ngspice-${ver}"
+    # GitHub releases é mais confiável que SourceForge
+    local url="https://github.com/ngspice/ngspice/archive/refs/tags/ngspice-${ver}.tar.gz"
+    # O tarball do GitHub extrai como ngspice-ngspice-<ver>/
+    local dir="$IC_SRC/ngspice-ngspice-${ver}"
 
     if [[ ! -d "$dir" ]]; then
-        log "Baixando ngspice ${ver}..."
+        log "Baixando ngspice ${ver} (GitHub)..."
         ( cd "$IC_SRC" && wget -O "$tarball" "$url" && tar xzf "$tarball" )
     fi
-    log "Configurando ngspice..."
-    ( cd "$dir" && ./autogen.sh 2>/dev/null || true )
+    log "Configurando ngspice (autogen + configure)..."
+    # Tarball do GitHub não traz ./configure pré-gerado -- precisa de autogen
+    ( cd "$dir" && ./autogen.sh )
     ( cd "$dir" && ./configure \
         --prefix="$INSTALL_PREFIX" \
         --disable-debug \
